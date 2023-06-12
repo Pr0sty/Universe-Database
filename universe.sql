@@ -16,6 +16,11 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+DROP DATABASE universe;
+--
+-- Name: universe; Type: DATABASE; Schema: -; Owner: freecodecamp
+--
+
 CREATE DATABASE universe WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
 
 
@@ -195,7 +200,8 @@ CREATE TABLE public.star (
     distance_from_earth numeric,
     mass integer NOT NULL,
     name character varying(20),
-    magnitude integer NOT NULL
+    magnitude integer NOT NULL,
+    galaxy_id integer
 );
 
 
@@ -262,6 +268,10 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 -- Data for Name: asteroid; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.asteroid VALUES (1, 'Zephyr', 500, 2001, ' Astronomical Union');
+INSERT INTO public.asteroid VALUES (2, 'Lyris', 750, 2013, 'Keck Observatory');
+INSERT INTO public.asteroid VALUES (3, 'Vesper', 400, 1998, 'Spacewatch');
+INSERT INTO public.asteroid VALUES (4, 'Orinoco', 600, 2006, 'Catalina Sky Survey');
 
 
 --
@@ -280,18 +290,56 @@ INSERT INTO public.galaxy VALUES (6, 'milky way', 20, true, 'our galaxy');
 -- Data for Name: moon; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.moon VALUES (1, 100, 'Luna', '1900-01-01', 'Earth moon');
+INSERT INTO public.moon VALUES (2, 76, 'Io', '1610-08-01', 'Jupiter moon');
+INSERT INTO public.moon VALUES (3, 130, 'Europa', '1610-08-08', 'Jupiter moon');
+INSERT INTO public.moon VALUES (4, 240, 'Ganymede', '1610-08-01', 'Jupiter moon');
+INSERT INTO public.moon VALUES (5, 420, 'Callisto', '1610-07-01', 'Jupiter moon');
+INSERT INTO public.moon VALUES (6, 250, 'Titan', '1655-03-25', 'Saturn moon');
+INSERT INTO public.moon VALUES (7, 175, 'Enceladus', '1789-08-28', 'Saturn moon');
+INSERT INTO public.moon VALUES (8, 275, 'Triton', '1846-10-10', 'Neptune moon');
+INSERT INTO public.moon VALUES (9, 90, 'Phobos', '1877-08-17', 'Mars moon');
+INSERT INTO public.moon VALUES (10, 140, 'Deimos', '1877-08-12', 'Mars moon');
+INSERT INTO public.moon VALUES (11, 300, 'Charon', '1978-06-22', 'Pluto moon');
+INSERT INTO public.moon VALUES (12, 95, 'Nereid', '1949-05-01', 'Neptune moon');
+INSERT INTO public.moon VALUES (13, 50, 'Mimas', '1789-09-17', 'Saturn moon');
+INSERT INTO public.moon VALUES (14, 80, 'Rhea', '1675-12-23', 'Saturn moon');
+INSERT INTO public.moon VALUES (15, 110, 'Dione', '1684-03-21', 'Saturn moon');
+INSERT INTO public.moon VALUES (16, 120, 'Thetys', '1684-03-21', 'Saturn moon');
+INSERT INTO public.moon VALUES (17, 200, 'Hyperion', '1848-09-16', 'Saturn moon');
+INSERT INTO public.moon VALUES (18, 150, 'Lapetus', '1671-10-25', 'Saturn moon');
+INSERT INTO public.moon VALUES (19, 170, 'Miranda', '1948-02-16', 'Uranus moon');
+INSERT INTO public.moon VALUES (20, 60, 'Ariel', '1851-10-24', 'Uranus moon');
 
 
 --
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.planet VALUES (1, 'Blue gas giant', true, 'Hydrogen', 'Aurora');
+INSERT INTO public.planet VALUES (2, 'Red tocky planet', false, 'Iron', 'Crimson');
+INSERT INTO public.planet VALUES (3, 'Green ocean world', true, 'Oxygen', 'Marina');
+INSERT INTO public.planet VALUES (4, 'Yellow desert planet', false, 'Silicon', 'Sahara');
+INSERT INTO public.planet VALUES (5, 'Orange volcanic planet', false, 'Magma', 'Inferno');
+INSERT INTO public.planet VALUES (6, 'Pink ice planet', false, 'Nitrogen', 'Blush');
+INSERT INTO public.planet VALUES (7, 'Brown dwarf planet', false, 'Helium', 'Ember');
+INSERT INTO public.planet VALUES (8, 'Purple gas giant', false, 'Methane', 'Orchid');
+INSERT INTO public.planet VALUES (9, 'Teal ringed planet', false, 'Carbon', 'Azura');
+INSERT INTO public.planet VALUES (10, 'White frozen planet', false, 'Water', 'Alba');
+INSERT INTO public.planet VALUES (11, 'Black ocean planet', true, 'Carbon', 'Obsidian');
+INSERT INTO public.planet VALUES (12, 'Gold desert planet', false, 'Gold', 'Aureus');
 
 
 --
 -- Data for Name: star; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.star VALUES (1, 3.2, 500, 'Alpha Centauri', 1, NULL);
+INSERT INTO public.star VALUES (2, 8.7, 1000, 'Betelgeuse', 0, NULL);
+INSERT INTO public.star VALUES (3, 5.4, 750, 'Sirius', 2, NULL);
+INSERT INTO public.star VALUES (4, 12.1, 120, 'Polaris', 4, NULL);
+INSERT INTO public.star VALUES (5, 20.5, 900, 'Vega', 3, NULL);
+INSERT INTO public.star VALUES (6, 8.5, 120, 'Altair', 3, NULL);
 
 
 --
@@ -407,6 +455,14 @@ ALTER TABLE ONLY public.star
 
 ALTER TABLE ONLY public.star
     ADD CONSTRAINT star_pkey PRIMARY KEY (star_id);
+
+
+--
+-- Name: star star_galaxy_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT star_galaxy_id_fkey FOREIGN KEY (galaxy_id) REFERENCES public.galaxy(galaxy_id);
 
 
 --
